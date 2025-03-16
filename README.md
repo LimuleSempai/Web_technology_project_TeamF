@@ -36,5 +36,7 @@ The backend of the application is responsible for handling API requests, managin
 ## Deployment
 The project is configured to be deployed on Vercel. The `vercel.json` file specifies the build and routing configurations for the backend.
 
+Current url : https://web-technology-project-team-f.vercel.app/
+
 ## Environment Variables
 The project uses environment variables to manage sensitive information such as database connection strings and API keys. These variables are defined in an `.env` file.
