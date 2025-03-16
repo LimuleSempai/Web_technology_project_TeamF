@@ -67,6 +67,26 @@ router.get("/transports", async (req, res) => {
   }
 });
 
+// Get transport data by route_id
+router.get("/transports/route/:route_id", async (req, res) => {
+  try {
+    const data = await TransportData.find({ route_id: req.params.route_id });
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching transport data by route_id" });
+  }
+});
+
+// Get transport data by trip_id
+router.get("/transports/trip/:trip_id", async (req, res) => {
+  try {
+    const data = await TransportData.find({ trip_id: req.params.trip_id });
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching transport data by trip_id" });
+  }
+});
+
 // Get individual transport details
 router.get("/transport/:id", async (req, res) => {
   try {
