@@ -2,6 +2,11 @@ const express = require("express");
 const Review = require("../models/Review");
 const router = express.Router();
 
+// Default route for testing
+router.get("/", (req, res) => {
+  res.send("Review API is running...");
+});
+
 // Post a review
 router.post("/transport/:id/review", async (req, res) => {
   const { rating, comment } = req.body;

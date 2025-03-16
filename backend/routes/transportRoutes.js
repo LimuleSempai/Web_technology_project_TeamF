@@ -3,6 +3,11 @@ const axios = require("axios");
 const TransportData = require("../models/TransportData");
 const router = express.Router();
 
+// Default route for testing
+router.get("/", (req, res) => {
+  res.send("Transport API is running...");
+});
+
 // Fetch and store transport data from API
 router.get("/update-transport", async (req, res) => {
   try {
