@@ -26,7 +26,7 @@ router.post("/register", validateUserRegistration, async (req, res) => {
 
     res.status(201).json({ message: "User registered successfully" });
   } catch (error) {
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: "Server error during registration", error: error.message });
   }
 });
 
@@ -46,7 +46,7 @@ router.post("/login", async (req, res) => {
     res.cookie("token", token, { httpOnly: true, secure: true });
     res.json({ message: "Login successful", token });
   } catch (error) {
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: "Server error during login", error: error.message });
   }
 });
 
