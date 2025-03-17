@@ -5,10 +5,12 @@ const User = require("../models/User");
 const { validateUserRegistration } = require("../middleware/validation");
 const router = express.Router();
 
-
-// Default route for testing
+// Check if user is logged in
 router.get("/", (req, res) => {
-  res.send("Auth API is running...");
+  if (req.session.user) {
+    return res.json({ loggedIn: true, user: req.session.user });
+  }
+  res.json({ loggedIn: false });
 });
 
 
@@ -26,7 +28,7 @@ router.post("/register", validateUserRegistration, async (req, res) => {
 
     res.status(201).json({ message: "User registered successfully" });
   } catch (error) {
-    res.status(500).json({ message: "Server error during registration", error: error.message });
+    res.status(500).json({ message: "Server error" });
   }
 });
 
@@ -41,29 +43,44 @@ router.post("/login", async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+    // Store user data in session
+    req.session.user = { id: user._id, name: user.name, email: user.email };
 
-    res.cookie("token", token, { httpOnly: true, secure: true });
-    res.json({ message: "Login successful", token });
-  } catch (error) {
-    res.status(500).json({ message: "Server error during login", error: error.message });
-  }
-});
+    console.log("Session after login:", req.session); // Debugging
 
-// Logout user
-router.post("/logout", (req, res) => {
-  res.clearCookie("token");
-  res.json({ message: "Logged out successfully" });
-});
-
-// Get user profile
-router.get("/profile", async (req, res) => {
-  try {
-    const user = await User.findById(req.user.id).select("-password");
-    res.json(user);
+    res.json({ message: "Login successful", user: req.session.user });
   } catch (error) {
     res.status(500).json({ message: "Server error" });
   }
+});
+
+
+// Check Session-Based Authentication
+router.get("/profile", (req, res) => {
+  console.log("Checking session:", req.session); // Debugging
+
+  if (!req.session.user) {
+    return res.status(401).json({ message: "Unauthorized - No active session" });
+  }
+  res.json(req.session.user);
+});
+
+
+// Logout User
+router.post("/logout", (req, res) => {
+  console.log("Before destroying session:", req.session.user); // Debugging
+
+  req.session.destroy(err => {
+    if (err) {
+      console.error("Session destruction error:", err);
+      return res.status(500).json({ message: "Logout failed" });
+    }
+
+    res.clearCookie("connect.sid"); // Ensure session cookie is cleared
+
+    console.log("After destroying session:", req.session); // Debugging
+    res.json({ message: "Logged out successfully" });
+  });
 });
 
 module.exports = router;
