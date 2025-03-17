@@ -14,7 +14,7 @@ router.post("/transport/:id/review", async (req, res) => {
   try {
     const newReview = new Review({
       transportId: req.params.id,
-      userId: req.user.id,
+      userId: req.session.user.id,
       rating,
       comment,
     });
