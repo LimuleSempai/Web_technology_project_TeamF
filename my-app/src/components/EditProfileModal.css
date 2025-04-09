@@ -1,0 +1,77 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .modal-content {
+    background: #fff;
+    padding: 2rem;
+    width: 90%;
+    max-width: 500px;
+    border-radius: 10px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    position: relative;
+  }
+  
+  .edit-profile-form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .edit-profile-form label {
+    margin-top: 1rem;
+    font-weight: bold;
+  }
+  
+  .edit-profile-form input {
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+  
+  .edit-profile-form input.invalid {
+    border: 1px solid red;
+  }
+  
+  .error {
+    color: red;
+    font-size: 0.85rem;
+    margin-top: 4px;
+  }
+  
+  .success {
+    color: green;
+    margin-bottom: 1rem;
+  }
+  
+  .modal-actions {
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .modal-actions button {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .modal-actions .cancel {
+    background-color: #888;
+    color: white;
+  }
+  
+  .modal-actions button[type="submit"] {
+    background-color: #4caf50;
+    color: white;
+  }
+  

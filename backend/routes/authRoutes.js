@@ -83,4 +83,41 @@ router.post("/logout", (req, res) => {
   });
 });
 
+router.put("/profile", async (req, res) => {
+  console.log("Session:", req.session);
+  console.log("Request body:", req.body);
+
+  try {
+    const userId = req.session?.user?.id;
+
+    if (!userId) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    const { name, email, password } = req.body;
+
+    user.name = name || user.name;
+    user.email = email || user.email;
+
+    if (password) {
+      const hashedPassword = await bcrypt.hash(password, 10);
+      user.password = hashedPassword;
+    }
+
+    await user.save();
+    res.json({ message: "Profile updated" });
+
+    req.session.user = { id: user._id, name: user.name, email: user.email };
+
+    console.log("Session after modification:", req.session); // Debugging
+
+  } catch (error) {
+    console.error("Profile update error:", error);
+    res.status(500).json({ message: "Update failed", error: error.message });
+  }
+});
+
 module.exports = router;
