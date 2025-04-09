@@ -12,16 +12,25 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 const allowedOrigins = [
   'http://localhost:3000',
+  'https://web-tech-teamf-frontend.vercel.app',
   'https://web-tech-teamf-frontend-git-main-limulesempais-projects.vercel.app'
 ];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true
+}));
+
 
 // Middleware
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({
-  origin: allowedOrigins, // Allow frontend to send cookies
-  credentials: true // Allow sending cookies with requests
-}));
 
 // Configure Sessions & Cookies
 app.use(session({
