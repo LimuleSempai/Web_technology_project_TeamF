@@ -9,6 +9,7 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import AboutUs from './pages/AboutUs';
 import Profile from './pages/Profile';
+import EditProfileModal from "./components/EditProfileModal";
 
 function App() {
   return (

@@ -1,9 +1,11 @@
 // src/pages/Profile.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import EditProfileModal from '../components/EditProfileModal';
 import './Profile.css';
 
 const Profile = () => {
+  const [showModal, setShowModal] = useState(false);
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -16,9 +18,17 @@ const Profile = () => {
 
   return (
     <div className="profile-container">
-      <h2>👤 User Profile</h2>
-      <p><strong>Name:</strong> {user.name}</p>
-      <p><strong>Email:</strong> {user.email}</p>
+      <h2>Welcome, {user?.name}</h2>
+      <p><strong>Email:</strong> {user?.email}</p>
+      <button onClick={() => setShowModal(true)}>Edit Profile</button>
+
+      {showModal && (
+        <EditProfileModal
+          onClose={() => setShowModal(false)}
+          onSuccess={() => {
+          }}
+        />
+      )}
     </div>
   );
 };
