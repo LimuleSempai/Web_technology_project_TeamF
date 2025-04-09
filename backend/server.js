@@ -10,12 +10,16 @@ connectDB();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+const allowedOrigins = [
+  'http://localhost:3000',
+  'https://your-frontend.vercel.app'
+];
 
 // Middleware
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-  origin: "http://localhost:3000", // Allow frontend to send cookies
+  origin: allowedOrigins, // Allow frontend to send cookies
   credentials: true // Allow sending cookies with requests
 }));
 
