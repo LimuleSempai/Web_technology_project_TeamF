@@ -14,7 +14,7 @@ const EditProfileModal = ({ onClose, onSuccess }) => {
   const [success, setSuccess] = useState('');
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/auth/profile', { withCredentials: true })
+    axios.get(`${process.env.REACT_APP_API_URI}/api/auth/profile`, { withCredentials: true })
       .then(res => {
         setFormData(prev => ({ ...prev, name: res.data.name, email: res.data.email }));
       })
@@ -108,7 +108,7 @@ const EditProfileModal = ({ onClose, onSuccess }) => {
       const updateData = { name, email };
       if (password) updateData.password = password;
 
-      await axios.put('http://localhost:5000/api/auth/profile', updateData, {
+      await axios.put(`${process.env.REACT_APP_API_URI}/api/auth/profile`, updateData, {
         withCredentials: true,
       });
 

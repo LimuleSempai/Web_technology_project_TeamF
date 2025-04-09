@@ -12,7 +12,7 @@ const Login = () => {
   const handleLogin = (e) => {
     e.preventDefault();
 
-    axios.post('http://localhost:5000/api/auth/login', { email, password }, { withCredentials: true })
+    axios.post(`${process.env.REACT_APP_API_URI}/api/auth/login`, { email, password }, { withCredentials: true })
       .then((res) => {
         navigate('/');
         window.location.reload();
