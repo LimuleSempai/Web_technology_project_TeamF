@@ -10,120 +10,134 @@ function Register() {
     confirmPassword: ''
   });
 
+  const [errors, setErrors] = useState({});
   const [message, setMessage] = useState('');
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+  const validateField = (name, value) => {
+    const newErrors = { ...errors };
+
+    if (name === 'email') {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      newErrors.email = emailRegex.test(value) ? '' : 'Invalid email';
+    }
+
+    if (name === 'password') {
+      if (value.length < 8) {
+        newErrors.password = 'Password must be at least 8 characters';
+      } else if (!/[a-z]/.test(value)) {
+        newErrors.password = 'Password must include a lowercase letter';
+      } else if (!/[A-Z]/.test(value)) {
+        newErrors.password = 'Password must include an uppercase letter';
+      } else if (!/[!@#$%^&*(),.?":{}|<>]/.test(value)) {
+        newErrors.password = 'Password must include a special character';
+      } else {
+        newErrors.password = '';
+      }
+    }
+
+    if (name === 'confirmPassword') {
+      newErrors.confirmPassword =
+        value !== formData.password ? 'Passwords do not match' : '';
+    }
+
+    setErrors(newErrors);
   };
 
-  const validate = () => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
-  
-    if (!formData.name || !formData.email || !formData.password || !formData.confirmPassword) {
-      return "All fields are required";
-    }
-  
-    if (!emailRegex.test(formData.email)) {
-      return "Invalid email format";
-    }
-  
-    if (formData.password.length < 6) {
-      return "Password must be at least 6 characters";
-    }
-  
-    if (!/[a-z]/.test(formData.password)) {
-      return "Password must include a lowercase letter";
-    }
-  
-    if (!/[A-Z]/.test(formData.password)) {
-      return "Password must include an uppercase letter";
-    }
-  
-    if (!specialCharRegex.test(formData.password)) {
-      return "Password must include a special character";
-    }
-  
-    if (formData.password !== formData.confirmPassword) {
-      return "Passwords do not match";
-    }
-  
-    return null;
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value
+    }));
+
+    validateField(name, value);
   };
-  
+
+  const validateForm = () => {
+    const requiredFields = ['name', 'email', 'password', 'confirmPassword'];
+    let formIsValid = true;
+    const newErrors = {};
+
+    requiredFields.forEach((field) => {
+      validateField(field, formData[field]);
+      if (!formData[field] || errors[field]) {
+        formIsValid = false;
+      }
+    });
+
+    setErrors(newErrors);
+    return formIsValid;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage('');
-  
-    const error = validate();
-    if (error) {
-      setMessage(error);
-      return;
-    }
-  
+
+    if (!validateForm()) return;
+
     try {
-      const response = await axios.post(`${process.env.REACT_APP_API_URI}api/auth/register`, {
+      const res = await axios.post(`${process.env.REACT_APP_API_URI}api/auth/register`, {
         name: formData.name,
         email: formData.email,
         password: formData.password
       }, { withCredentials: true });
-  
-      setMessage(response.data.message || "Registered successfully");
-    } catch (error) {
-      const errMsg = error.response?.data?.message;
-      if (errMsg?.includes("Username")) {
-        setMessage("This name is already taken. Please choose another.");
-      } else if (errMsg?.includes("Email")) {
-        setMessage("This email is already registered.");
-      } else {
-        setMessage("Something went wrong.");
-      }
+
+      setMessage(res.data.message || 'Registered successfully!');
+    } catch (err) {
+      const errMsg = err.response?.data?.message || 'Registration failed';
+      setMessage(errMsg);
     }
   };
 
   return (
     <div className="register-container">
       <h2>Register</h2>
-      {message && <p className="message">{message}</p>}
+      {message && <div className="message">{message}</div>}
       <form onSubmit={handleSubmit} className="register-form">
+        <label>Name</label>
         <input
           type="text"
           name="name"
-          placeholder="Name"
           value={formData.name}
           onChange={handleChange}
+          className={errors.name ? 'invalid' : ''}
           required
         />
+        {errors.name && <span className="error">{errors.name}</span>}
 
+        <label>Email</label>
         <input
           type="email"
           name="email"
-          placeholder="Email"
           value={formData.email}
           onChange={handleChange}
+          className={errors.email ? 'invalid' : ''}
           required
         />
+        {errors.email && <span className="error">{errors.email}</span>}
 
+        <label>Password</label>
         <input
           type="password"
           name="password"
-          placeholder="Password"
           value={formData.password}
           onChange={handleChange}
+          className={errors.password ? 'invalid' : ''}
           required
         />
+        {errors.password && <span className="error">{errors.password}</span>}
 
+        <label>Confirm Password</label>
         <input
           type="password"
           name="confirmPassword"
-          placeholder="Confirm Password"
           value={formData.confirmPassword}
           onChange={handleChange}
+          className={errors.confirmPassword ? 'invalid' : ''}
           required
         />
+        {errors.confirmPassword && <span className="error">{errors.confirmPassword}</span>}
 
         <button type="submit">Register</button>
       </form>
