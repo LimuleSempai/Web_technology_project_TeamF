@@ -12,7 +12,6 @@ const EditProfileModal = ({ onClose, onSuccess }) => {
 
   const [errors, setErrors] = useState({});
   const [success, setSuccess] = useState('');
-  const [message, setMessage] = useState('');
 
   useEffect(() => {
     axios.get(`${process.env.REACT_APP_API_URI}api/auth/profile`, { withCredentials: true })
@@ -117,17 +116,10 @@ const EditProfileModal = ({ onClose, onSuccess }) => {
         onSuccess();
         onClose();
         window.location.reload(); // Refresh to reflect updates
-      }, 1000);
+      }, 2500);
     } catch (err) {
-      const errMsg = err.response?.data?.message;
-      if (errMsg?.includes("Username")) {
-        setMessage("This name is already taken. Please choose another.");
-      } else if (errMsg?.includes("Email")) {
-        setMessage("This email is already registered.");
-      } else {
-        setMessage("Something went wrong.");
-      }
-      setErrors({ general: errMsg });
+      const errorMessage = err.response?.data?.message || 'Failed to update profile';
+      setErrors({ general: errorMessage });
     }    
   };
 
@@ -135,7 +127,6 @@ const EditProfileModal = ({ onClose, onSuccess }) => {
     <div className="modal-overlay">
       <div className="modal-content">
         <h2>Edit Profile</h2>
-        {message && <p className="message">{message}</p>}
         <form onSubmit={handleSubmit} className="edit-profile-form">
           {errors.general && <div className="error">{errors.general}</div>}
           {success && <div className="success">{success}</div>}
