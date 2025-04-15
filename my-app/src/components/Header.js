@@ -10,13 +10,13 @@ const Header = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_API_URI}/api/auth/profile`, { withCredentials: true })
+    axios.get(`${process.env.REACT_APP_API_URI}api/auth/profile`, { withCredentials: true })
       .then((res) => setUser(res.data))
       .catch(() => setUser(null));
   }, []);
 
   const handleLogout = () => {
-    axios.post(`${process.env.REACT_APP_API_URI}/api/auth/logout`, {}, { withCredentials: true })
+    axios.post(`${process.env.REACT_APP_API_URI}api/auth/logout`, {}, { withCredentials: true })
       .then(() => {
         setUser(null);
         navigate('/');

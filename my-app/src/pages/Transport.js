@@ -6,7 +6,7 @@ const Transport = () => {
 
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_API_URI}/api/transport/transports`)
+      .get(`${process.env.REACT_APP_API_URI}api/transport/transports`)
       .then((res) => {
         console.log("Transport data:", res.data);
         setTransports(Array.isArray(res.data) ? res.data : []); // Make sure it's an array
