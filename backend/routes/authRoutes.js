@@ -110,7 +110,9 @@ router.put("/profile", async (req, res) => {
     await user.save();
     res.json({ message: "Profile updated" });
 
-    req.session.user = { id: user._id, name: user.name, email: user.email };
+    // Update the session user info without re-logging in
+    req.session.user.name = user.name;
+    req.session.user.email = user.email;
 
     console.log("Session after modification:", req.session); // Debugging
 
