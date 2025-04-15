@@ -19,8 +19,12 @@ router.post("/register", validateUserRegistration, async (req, res) => {
   const { name, email, password } = req.body;
 
   try {
-    const existingUser = await User.findOne({ email });
-    if (existingUser) return res.status(400).json({ message: "User already exists" });
+    const existingEmail = await User.findOne({ email });
+    if (existingEmail) return res.status(400).json({ message: "Email is already in use" });
+
+    const existingName = await User.findOne({ name });
+    if (existingName) return res.status(400).json({ message: "Username is already taken" });
+
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = new User({ name, email, password: hashedPassword });
@@ -99,7 +103,24 @@ router.put("/profile", async (req, res) => {
 
     const { name, email, password } = req.body;
 
+    // Only check for duplicates if name is being changed
+    if (name && name !== user.name) {
+      const existingName = await User.findOne({ name });
+      if (existingName) {
+        return res.status(400).json({ message: "Username is already taken" });
+      }
+    }
+
     user.name = name || user.name;
+    
+    // Only check for duplicates if email is being changed
+    if (email && email !== user.email) {
+      const existingEmail = await User.findOne({ email });
+      if (existingEmail) {
+        return res.status(400).json({ message: "Email is already in use by another account" });
+      }
+    }
+
     user.email = email || user.email;
 
     if (password) {
@@ -113,6 +134,14 @@ router.put("/profile", async (req, res) => {
     // Update the session user info without re-logging in
     req.session.user.name = user.name;
     req.session.user.email = user.email;
+
+    req.session.save(err => {
+      if (err) {
+        console.error("Error saving session after update:", err);
+      } else {
+        console.log("Session updated and saved");
+      }
+    });
 
     console.log("Session after modification:", req.session); // Debugging
 
