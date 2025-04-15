@@ -9,7 +9,7 @@ const Profile = () => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_API_URI}/api/auth/profile`, { withCredentials: true })
+    axios.get(`${process.env.REACT_APP_API_URI}api/auth/profile`, { withCredentials: true })
       .then((res) => setUser(res.data))
       .catch((err) => console.error('Failed to fetch user profile', err));
   }, []);
