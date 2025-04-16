@@ -116,7 +116,7 @@ const EditProfileModal = ({ onClose, onSuccess }) => {
         onSuccess();
         onClose();
         window.location.reload(); // Refresh to reflect updates
-      }, 2500);
+      }, 3000);
     } catch (err) {
       const errorMessage = err.response?.data?.message || 'Failed to update profile';
       setErrors({ general: errorMessage });
