@@ -16,6 +16,12 @@ function Register() {
   const validateField = (name, value) => {
     const newErrors = { ...errors };
 
+    if (name === 'name') {
+      if (!/^[a-z0-9]+$/i.test(value)) {
+        newErrors.name = 'Name must be alphanumeric';
+      }
+    }
+
     if (name === 'email') {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       newErrors.email = emailRegex.test(value) ? '' : 'Invalid email';
@@ -30,6 +36,8 @@ function Register() {
         newErrors.password = 'Password must include an uppercase letter';
       } else if (!/[!@#$%^&*(),.?":{}|<>]/.test(value)) {
         newErrors.password = 'Password must include a special character';
+      } else if (!/\d/.test(value)) {
+        newErrors.password = 'Password must include a number';
       } else {
         newErrors.password = '';
       }
