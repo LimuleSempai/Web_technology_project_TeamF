@@ -35,6 +35,8 @@ const EditProfileModal = ({ onClose, onSuccess }) => {
     if (name === 'name') {
       if (!/^[a-z0-9]+$/i.test(value)) {
         fieldErrors.name = 'Name must be alphanumeric';
+      } else {
+        fieldErrors.name = '';
       }
     }
 

@@ -19,6 +19,8 @@ function Register() {
     if (name === 'name') {
       if (!/^[a-z0-9]+$/i.test(value)) {
         newErrors.name = 'Name must be alphanumeric';
+      } else {
+        newErrors.name = '';
       }
     }
 
