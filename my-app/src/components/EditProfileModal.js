@@ -32,6 +32,12 @@ const EditProfileModal = ({ onClose, onSuccess }) => {
   const validateField = (name, value) => {
     let fieldErrors = { ...errors };
 
+    if (name === 'name') {
+      if (!/^[a-z0-9]+$/i.test(value)) {
+        fieldErrors.name = 'Name must be alphanumeric';
+      }
+    }
+
     if (name === 'email') {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       fieldErrors.email = emailRegex.test(value) ? '' : 'Invalid email';
@@ -47,6 +53,8 @@ const EditProfileModal = ({ onClose, onSuccess }) => {
         error = 'Must contain at least one uppercase letter';
       } else if (value && !/[!@#$%^&*(),.?":{}|<>]/.test(value)) {
         error = 'Must contain at least one special character';
+      } else if (value && !/\d/.test(value)) {
+        error = 'Must contain at least one number';
       }
       fieldErrors.password = error;
     }
@@ -63,8 +71,8 @@ const EditProfileModal = ({ onClose, onSuccess }) => {
     let valid = true;
     let newErrors = {};
 
-    if (!name) {
-      newErrors.name = 'Name is required';
+    if (!name || errors.name) {
+      newErrors.name = 'Valid name is required';
       valid = false;
     }
 
@@ -85,6 +93,9 @@ const EditProfileModal = ({ onClose, onSuccess }) => {
         valid = false;
       } else if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
         newErrors.password = 'Password must include a special character';
+        valid = false;
+      } else if (!/\d/.test(password)) {
+        newErrors.password = "Password must include a number";
         valid = false;
       }
     
@@ -116,7 +127,7 @@ const EditProfileModal = ({ onClose, onSuccess }) => {
         onSuccess();
         onClose();
         window.location.reload(); // Refresh to reflect updates
-      }, 3000);
+      }, 1000);
     } catch (err) {
       const errorMessage = err.response?.data?.message || 'Failed to update profile';
       setErrors({ general: errorMessage });
