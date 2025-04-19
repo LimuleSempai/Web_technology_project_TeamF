@@ -1,3 +1,7 @@
+# Project specific ignores
+backend/api_definitions/GTFS_Realtime/
+backend/api_definitions/GTFS_Realtime/*
+
 # Created by https://www.toptal.com/developers/gitignore/api/node,vs
 # Edit at https://www.toptal.com/developers/gitignore?templates=node,vs
 
