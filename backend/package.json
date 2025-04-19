@@ -19,7 +19,8 @@
   },
   "homepage": "https://github.com/LimuleSempai/Web_technology_project_TeamF#readme",
   "dependencies": {
-    "axios": "^1.8.3",
+    "adm-zip": "^0.5.16",
+    "axios": "^1.8.4",
     "bcryptjs": "^3.0.2",
     "body-parser": "^1.20.3",
     "connect-mongo": "^5.1.0",
@@ -31,7 +32,8 @@
     "express-session": "^1.18.1",
     "express-validator": "^7.2.1",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.12.1"
+    "mongoose": "^8.12.1",
+    "node-stream-zip": "^1.15.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.9"
