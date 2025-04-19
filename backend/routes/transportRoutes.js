@@ -1,18 +1,82 @@
 const express = require("express"); // Import Express framework
 const axios = require("axios"); // Import axios to make HTTP requests
-const TransportData = require("../models/TransportData"); // Import the Mongoose model for transport data
-const router = express.Router(); // Create a new Express router instance
 const fs = require('fs'); // Import Node.js File System module
 const path = require('path'); // Import Node.js Path module
+const { createWriteStream } = require('fs'); // Import createWriteStream from fs
+const { promisify } = require('util'); // Import promisify from util
+const stream = require('stream'); // Import stream module
+const pipeline = promisify(stream.pipeline); // Promisify pipeline for stream handling
+const AdmZip = require('adm-zip'); // Import AdmZip for handling zip files
+const TransportData = require("../models/TransportData"); // Import the Mongoose model for transport data
+const router = express.Router(); // Create a new Express router instance
 
-// --- GTFS Data Loading ---
-const stopDataMap = new Map(); // Map<stop_id, stop_name>
-// Updated routeDataMap to store more info
-const routeDataMap = new Map(); // Map<route_id, { type: number, shortName: string, longName: string }>
-
-const gtfsDir = path.join(__dirname, '..', 'api_definitions', 'GTFS_Realtime'); // Path to GTFS files
+// --- GTFS Data Configuration ---
+const GTFS_URL = 'https://www.transportforireland.ie/transitData/Data/GTFS_Realtime.zip';
+const gtfsDir = path.join(__dirname, '..', 'api_definitions', 'GTFS_Realtime');
+const gtfsZipPath = path.join(gtfsDir, 'GTFS_Realtime.zip');
 const stopsFilePath = path.join(gtfsDir, 'stops.txt');
 const routesFilePath = path.join(gtfsDir, 'routes.txt');
+
+// Maps for storing GTFS data
+const stopDataMap = new Map(); // Map<stop_id, stop_name>
+const routeDataMap = new Map(); // Map<route_id, { type: number, shortName: string, longName: string }>
+
+// Download and extract GTFS data if missing
+async function ensureGTFSData() {
+    try {
+        // Create directory if it doesn't exist
+        if (!fs.existsSync(gtfsDir)) {
+            fs.mkdirSync(gtfsDir, { recursive: true });
+        }
+
+        // Check if required files exist
+        const filesExist = fs.existsSync(stopsFilePath) && fs.existsSync(routesFilePath);
+        
+        if (!filesExist) {
+            console.log('GTFS files missing, downloading...');
+            
+            // Download the zip file
+            const response = await axios({
+                method: 'get',
+                url: GTFS_URL,
+                responseType: 'stream',
+                timeout: 30000 // 30 second timeout
+            });
+
+            // Create temp directory if needed
+            const tempDir = path.join(__dirname, '..', 'temp');
+            if (!fs.existsSync(tempDir)) {
+                fs.mkdirSync(tempDir, { recursive: true });
+            }
+
+            // Save to temp location first
+            const tempZipPath = path.join(tempDir, 'gtfs_temp.zip');
+            await pipeline(response.data, createWriteStream(tempZipPath));
+            console.log('Download completed');
+
+            // Extract the zip file
+            console.log('Extracting files...');
+            const zip = new AdmZip(tempZipPath);
+            zip.extractAllTo(gtfsDir, true);
+            console.log('Extraction completed');
+
+            // Clean up temp files
+            fs.unlinkSync(tempZipPath);
+            if (fs.existsSync(tempDir)) {
+                fs.rmdirSync(tempDir);
+            }
+            console.log('Cleanup completed');
+
+            // Verify files were extracted correctly
+            if (!fs.existsSync(stopsFilePath) || !fs.existsSync(routesFilePath)) {
+                throw new Error('Required GTFS files not found after extraction');
+            }
+        }
+    } catch (error) {
+        console.error('Error downloading or extracting GTFS data:', error);
+        throw error;
+    }
+}
 
 // Function to parse CSV data simply (assumes no commas within fields)
 const parseCsv = (data) => {
@@ -61,30 +125,33 @@ const loadRoutesFromFile = (filePath, map) => {
 };
 // --- End Route Loading Function ---
 
-// Load and parse stops.txt
-try {
-  if (fs.existsSync(stopsFilePath)) { // Check if file exists
-    const stopsData = fs.readFileSync(stopsFilePath, 'utf8');
-    const stops = parseCsv(stopsData);
-    stops.forEach(stop => {
-      if (stop.stop_id && stop.stop_name) {
-        stopDataMap.set(stop.stop_id, stop.stop_name);
-      }
-    });
-    console.log(`Loaded ${stopDataMap.size} stops from GTFS.`);
-  } else {
-    console.warn(`stops.txt not found at ${stopsFilePath}`);
-  }
-} catch (err) {
-  console.error("Error loading or parsing stops.txt:", err);
+// Updated route loading function
+async function loadGTFSData() {
+    try {
+        await ensureGTFSData();
+        
+        // Load stops
+        if (fs.existsSync(stopsFilePath)) {
+            const stopsData = fs.readFileSync(stopsFilePath, 'utf8');
+            const stops = parseCsv(stopsData);
+            stops.forEach(stop => {
+                if (stop.stop_id && stop.stop_name) {
+                    stopDataMap.set(stop.stop_id, stop.stop_name);
+                }
+            });
+            console.log(`Loaded ${stopDataMap.size} stops from GTFS.`);
+        }
+
+        // Load routes
+        await loadRoutesFromFile(routesFilePath, routeDataMap);
+        console.log(`Total unique routes loaded into routeDataMap: ${routeDataMap.size}`);
+    } catch (err) {
+        console.error("Error loading GTFS data:", err);
+    }
 }
 
-// --- Load Routes from GTFS_Realtime File ---
-console.log("Loading route data...");
-// Load from GTFS_Realtime only
-loadRoutesFromFile(routesFilePath, routeDataMap);
-console.log(`Total unique routes loaded into routeDataMap: ${routeDataMap.size}`);
-// --- End GTFS Data Loading ---
+// Initialize GTFS data when the module loads
+loadGTFSData();
 
 const getStopNameById = (stopId) => stopDataMap.get(stopId) || "Unknown Stop";
 // Updated function to get route details
