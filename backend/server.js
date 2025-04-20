@@ -1,7 +1,7 @@
 const express = require("express"); // Import the Express web framework
 const connectDB = require("./config/db"); // Import custom MongoDB connection function
 const cookieParser = require("cookie-parser"); // Parse cookies from incoming requests
-const cors = require("cors"); // Handle Cross-Origin Resource Sharing (CORS)
+// const cors = require("cors"); // Handle Cross-Origin Resource Sharing (CORS)
 const session = require("express-session"); // Manage user sessions on the server
 const MongoStore = require("connect-mongo"); // Store session data in MongoDB
 
