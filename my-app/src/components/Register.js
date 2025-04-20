@@ -87,7 +87,7 @@ function Register() { // Define the Register function
     if (!validateForm()) return; // Stop submission if validation fails
 
     try { // Attempt to register user via POST request to backend
-      const res = await axios.post(`${process.env.REACT_APP_API_URI}api/auth/register`, {
+      const res = await axios.post(`${process.env.REACT_APP_API_URI}auth/register`, {
         // Send form data, include credentials for session
         name: formData.name,
         email: formData.email,

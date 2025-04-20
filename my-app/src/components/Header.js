@@ -23,7 +23,7 @@ const Header = () => {
         }
 
         // Option 2 (Recommended): Verify status with backend
-        axios.get(`${process.env.REACT_APP_API_URI}api/auth/status`, { withCredentials: true })
+        axios.get(`${process.env.REACT_APP_API_URI}auth/status`, { withCredentials: true })
             .then(res => {
                 if (res.data.isLoggedIn) {
                     setUser(res.data.user);
@@ -42,7 +42,7 @@ const Header = () => {
     }, []);
 
     const handleLogout = () => {
-        axios.post(`${process.env.REACT_APP_API_URI}api/auth/logout`, {}, { withCredentials: true })
+        axios.post(`${process.env.REACT_APP_API_URI}auth/logout`, {}, { withCredentials: true })
             .then(() => {
                 localStorage.removeItem('user'); // Clear user from localStorage
                 setUser(null);

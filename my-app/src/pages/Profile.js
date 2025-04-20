@@ -9,7 +9,7 @@ const Profile = () => { // Define the Profile component
   const [user, setUser] = useState(null); // State to store the current user's profile data
 
   useEffect(() => { // Fetch user profile data on component mount
-    axios.get(`${process.env.REACT_APP_API_URI}api/auth/profile`, { withCredentials: true }) // Send GET request to backend to retrieve session-based user info
+    axios.get(`${process.env.REACT_APP_API_URI}auth/profile`, { withCredentials: true }) // Send GET request to backend to retrieve session-based user info
       .then((res) => setUser(res.data)) // On success, store user info in state
       .catch((err) => console.error('Failed to fetch user profile', err)); // On error, log a warning to the console
   }, []);

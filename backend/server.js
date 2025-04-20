@@ -50,20 +50,15 @@ app.use(session({
   }
 }));
 
-// Add a test route back at /api
-app.get("/api", (req, res) => {
-  console.log("[/api] Test route hit");
-  res.setHeader('Access-Control-Allow-Origin', '*'); // Temporarily allow all for this test route
-  res.send("🚀 API root is running...");
-});
-
+// Keep the root test route
 app.get("/", (req, res) => {
   res.send("API root is running");
 });
 
-// Mount routes WITH /api prefix again
+// Mount routes directly without /api prefix
 app.use("/auth", require("./routes/authRoutes.js"));
 app.use("/transport", require("./routes/transportRoutes.js"));
 app.use("/review", require("./routes/reviewRoutes.js"));
+
 // Export the app instance for Vercel
 module.exports = app;

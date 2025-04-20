@@ -39,7 +39,7 @@ const Transport = () => {
 
   // Fetch all stop names on component mount
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_API_URI}api/transport/stops`)
+    axios.get(`${process.env.REACT_APP_API_URI}transport/stops`)
       .then(res => {
         setAllStopNames(Array.isArray(res.data) ? res.data.sort() : []);
         setFilteredStopNames(Array.isArray(res.data) ? res.data.sort() : []); // Initially show all
@@ -62,7 +62,7 @@ const Transport = () => {
         params.append('type', type);
     }
     const queryString = params.toString();
-    const url = `${process.env.REACT_APP_API_URI}api/transport/transports${queryString ? '?' + queryString : ''}`;
+    const url = `${process.env.REACT_APP_API_URI}transport/transports${queryString ? '?' + queryString : ''}`;
 
     axios
       .get(url)

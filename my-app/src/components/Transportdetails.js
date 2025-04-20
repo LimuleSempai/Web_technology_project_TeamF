@@ -10,7 +10,7 @@ const TransportDetails = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await axios.get(`${process.env.REACT_APP_API_URI}api/transport/${id}`);
+      const res = await axios.get(`${process.env.REACT_APP_API_URI}transport/${id}`);
       setTransport(res.data);
     };
     fetchData();
