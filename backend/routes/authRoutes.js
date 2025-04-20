@@ -13,7 +13,6 @@ router.get("/", (req, res) => {
   res.json({ loggedIn: false }); // Otherwise, return loggedIn: false
 });
 
-
 // Register a new user with validation middleware
 router.post("/register", validateUserRegistration, async (req, res) => {
   const { name, email, password } = req.body; // Destructure name, email, password from the request body
@@ -24,7 +23,6 @@ router.post("/register", validateUserRegistration, async (req, res) => {
 
     const existingName = await User.findOne({ name }); // Check if username is already taken
     if (existingName) return res.status(400).json({ message: "Username is already taken" }); // If yes, respond with an error
-
 
     const hashedPassword = await bcrypt.hash(password, 10); // Hash the user's password before saving to DB
     const newUser = new User({ name, email, password: hashedPassword }); // Create new user with hashed password
@@ -38,26 +36,34 @@ router.post("/register", validateUserRegistration, async (req, res) => {
 
 // Login user
 router.post("/login", async (req, res) => {
-  const { email, password } = req.body; // Extract credentials from request body
-
+  const { email, password } = req.body;
   try {
-    const user = await User.findOne({ email }); // Attempt to find the user by email
-    if (!user) return res.status(400).json({ message: "Invalid email or password" }); // If user not found, return error
+    const user = await User.findOne({ email });
+    if (!user) return res.status(400).json({ message: "Invalid credentials" });
 
-    const isMatch = await bcrypt.compare(password, user.password); // Compare provided password with hashed one in DB
-    if (!isMatch) return res.status(400).json({ message: "Invalid credentials" }); // If password doesn't match, return error
+    const isMatch = await user.comparePassword(password);
+    if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
 
-    // Store user data in session
-    req.session.user = { id: user._id, name: user.name, email: user.email };
+    // Set session
+    req.session.user = { id: user._id, name: user.name, email: user.email }; // Store relevant info in session
 
-    console.log("Session after login:", req.session); // Debugging
+    console.log('Session after login:', req.session); // Debug log
 
-    res.json({ message: "Login successful", user: req.session.user }); // Respond with success and session-stored user info
+    // Send back user info along with success message/status
+    res.status(200).json({
+      message: "Login successful",
+      user: { // Send necessary user details to frontend
+        id: user._id,
+        name: user.name,
+        email: user.email
+      }
+    });
+
   } catch (error) {
-    res.status(500).json({ message: "Server error" }); // Handle any login errors
+    console.error("Login error:", error);
+    res.status(500).json({ message: "Server error during login" });
   }
 });
-
 
 // Check Session-Based Authentication
 router.get("/profile", (req, res) => {
@@ -69,21 +75,14 @@ router.get("/profile", (req, res) => {
   res.json(req.session.user); // If session is active, return the user data
 });
 
-
 // Logout User
 router.post("/logout", (req, res) => {
-  console.log("Before destroying session:", req.session.user); // Debugging
-
-  req.session.destroy(err => { // Destroy the session from server memory and MongoDB store
-    if (err) { // If there's an error destroying the session, handle it
-      console.error("Session destruction error:", err);
-      return res.status(500).json({ message: "Logout failed" });
+  req.session.destroy((err) => { // Destroy the session
+    if (err) {
+      return res.status(500).json({ message: "Could not log out, please try again." });
     }
-
-    res.clearCookie("connect.sid"); // Ensure session cookie is cleared
-
-    console.log("After destroying session:", req.session); // Debugging
-    res.json({ message: "Logged out successfully" }); // Respond with logout success
+    res.clearCookie('connect.sid'); // Clear the session cookie (adjust cookie name if different)
+    res.status(200).json({ message: "Logout successful" });
   });
 });
 
@@ -151,5 +150,17 @@ router.put("/profile", async (req, res) => {
     res.status(500).json({ message: "Update failed", error: error.message }); // Return 500 with the error message
   }
 });
+
+// Check authentication status
+router.get("/status", (req, res) => {
+  if (req.session && req.session.user) {
+    // If session exists, send back user data
+    res.status(200).json({ isLoggedIn: true, user: req.session.user });
+  } else {
+    // If no session, indicate user is not logged in
+    res.status(200).json({ isLoggedIn: false });
+  }
+});
+
 // Export the router for use in server.js
 module.exports = router;
