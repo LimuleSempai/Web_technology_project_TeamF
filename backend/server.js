@@ -16,7 +16,8 @@ const NODE_ENV = process.env.NODE_ENV || 'development'; // Determine environment
 const allowedOrigins = [
   'http://localhost:3000', // Keep localhost for local testing convenience
   'https://web-tech-teamf-frontend.vercel.app',
-  'https://web-tech-teamf-frontend-git-main-limulesempais-projects.vercel.app'
+  'https://web-tech-teamf-frontend-git-main-limulesempais-projects.vercel.app',
+  'https://transit-ie-frontend-ln0k14kfa-warnex04s-projects.vercel.app' // Add the new preview URL
 ];
 
 console.log(`[CORS Setup] Allowed Origins: ${allowedOrigins.join(', ')}`);
