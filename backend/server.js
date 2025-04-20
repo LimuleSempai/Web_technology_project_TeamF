@@ -76,7 +76,10 @@ app.get("/", (req, res) => {
   res.send("🚀 API is running...");
 });
 
- // Start the server and listen on the defined port
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
+// Start the server and listen on the defined port (for local development)
+// app.listen(PORT, () => {
+//   console.log(`Server running on http://localhost:${PORT}`);
+// });
+
+// Export the app instance for Vercel
+module.exports = app;
