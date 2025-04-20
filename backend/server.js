@@ -57,6 +57,10 @@ app.get("/api", (req, res) => {
   res.send("🚀 API root is running...");
 });
 
+app.get("/", (req, res) => {
+  res.send("API root is running");
+});
+
 // Mount routes WITH /api prefix again
 app.use("/auth", require("./routes/authRoutes.js"));
 app.use("/transport", require("./routes/transportRoutes.js"));
