@@ -10,26 +10,31 @@ connectDB(); // Connect to the MongoDB database
 
 const app = express(); // Create an instance of the Express application
 const PORT = process.env.PORT || 5000; // Define the port to run the server on (from env or default to 5000)
+const NODE_ENV = process.env.NODE_ENV || 'development'; // Determine environment
 
-// Define which frontends are allowed to connect to the API
+// Define which frontends are allowed to connect to the API in production
 const allowedOrigins = [
-  'http://localhost:3000',
+  'http://localhost:3000', // Keep localhost for local testing convenience
   'https://web-tech-teamf-frontend.vercel.app',
   'https://web-tech-teamf-frontend-git-main-limulesempais-projects.vercel.app'
 ];
 
-// Set up CORS middleware to allow only whitelisted origins and enable cookies
+// Set up CORS middleware
 app.use(cors({
   origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+
+    // Allow all origins in development, otherwise check the whitelist
+    if (NODE_ENV !== 'production' || allowedOrigins.includes(origin)) {
       callback(null, true); // Allow access
     } else {
+      console.warn(`CORS Error: Origin ${origin} not allowed.`); // Log denied origin
       callback(new Error('Not allowed by CORS')); // Reject access
     }
   },
   credentials: true // Allow cookies and session credentials
 }));
-
 
 // Built-in middleware to parse JSON request bodies
 app.use(express.json());

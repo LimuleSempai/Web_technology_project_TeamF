@@ -319,10 +319,13 @@ router.get("/transports", async (req, res) => {
 
 // Get transport data by route_id
 router.get("/transports/route/:route_id", async (req, res) => {
+  console.log(`[${new Date().toISOString()}] GET /transports/route/${req.params.route_id} - Request received`); // Log request
   try {
     const data = await TransportData.find({ route_id: req.params.route_id }); // Query database for transport entries with given route_id
+    console.log(`[${new Date().toISOString()}] GET /transports/route/${req.params.route_id} - Found ${data.length} records`); // Log success
     res.json(data); // Respond with matching data
   } catch (error) {
+    console.error(`[${new Date().toISOString()}] GET /transports/route/${req.params.route_id} - Error:`, error); // Log error
     res.status(500).json({ message: "Error fetching transport data by route_id" }); // Handle database errors
   }
 });
