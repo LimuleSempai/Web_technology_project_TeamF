@@ -24,24 +24,26 @@ console.log(`[CORS Setup] NODE_ENV: ${NODE_ENV}`);
 
 // Set up CORS middleware
 app.use(cors({
-  // Temporarily allow all origins for debugging
-  origin: true, 
-  // origin: function (origin, callback) {
-  //   console.log(`[CORS Check] Request Origin: ${origin}`); // Log the incoming origin
+  // Revert back to function-based origin check with logging
+  origin: function (origin, callback) {
+    console.log(`[CORS Check] Request Origin: ${origin}`); // Log the incoming origin
 
-  //   // Allow requests with no origin (like mobile apps or curl requests)
-  //   if (!origin) return callback(null, true);
+    // Allow requests with no origin (like mobile apps or curl requests)
+    // Also allow if origin is undefined (server-to-server, etc.)
+    if (!origin) {
+        console.log(`[CORS Check] Allowing request with no origin.`);
+        return callback(null, true);
+    }
 
-  //   // Check if the origin is in the allowed list OR if it's undefined (e.g., server-to-server, curl)
-  //   // In development, allow any origin for simplicity (optional, could restrict to localhost)
-  //   if (NODE_ENV !== 'production' || allowedOrigins.includes(origin)) {
-  //     console.log(`[CORS Check] Allowing origin: ${origin || 'undefined'}`);
-  //     callback(null, true); // Allow access
-  //   } else {
-  //     console.warn(`[CORS Check] Blocking origin: ${origin}`); // Log denied origin
-  //     callback(new Error('Not allowed by CORS')); // Reject access
-  //   }
-  // },
+    // Check if the origin is in the allowed list
+    if (allowedOrigins.includes(origin)) {
+      console.log(`[CORS Check] Allowing origin: ${origin}`);
+      callback(null, true); // Allow access
+    } else {
+      console.warn(`[CORS Check] Blocking origin: ${origin}`); // Log denied origin
+      callback(new Error('Not allowed by CORS')); // Reject access
+    }
+  },
   credentials: true // Allow cookies and session credentials
 }));
 
@@ -66,22 +68,17 @@ app.use(session({
   }
 }));
 
-// Mount authentication-related routes at /auth
-app.use("/auth", require("./routes/authRoutes.js"));
-// Mount transport-related routes at /transport
-app.use("/transport", require("./routes/transportRoutes.js"));
-// Mount review-related routes at /review
-app.use("/review", require("./routes/reviewRoutes.js"));
-
-// Default root route to test if the API is running
-app.get("/", (req, res) => {
-  res.send("🚀 API is running...");
+// Add a test route at /api root
+app.get("/api", (req, res) => {
+  console.log("[/api] Test route hit");
+  res.setHeader('Access-Control-Allow-Origin', '*'); // Temporarily allow all for this test route
+  res.send("🚀 API root is running...");
 });
 
-// Start the server and listen on the defined port (for local development)
-// app.listen(PORT, () => {
-//   console.log(`Server running on http://localhost:${PORT}`);
-// });
+// Mount routes WITH /api prefix
+app.use("/api/auth", require("./routes/authRoutes.js"));
+app.use("/api/transport", require("./routes/transportRoutes.js"));
+app.use("/api/review", require("./routes/reviewRoutes.js"));
 
 // Export the app instance for Vercel
 module.exports = app;

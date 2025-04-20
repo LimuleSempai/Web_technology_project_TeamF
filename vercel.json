@@ -2,6 +2,13 @@
   "version": 2,
   "builds": [
     {
+      "src": "my-app/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "build"
+      }
+    },
+    {
       "src": "backend/server.js",
       "use": "@vercel/node"
     }
@@ -10,6 +17,14 @@
     {
       "src": "/api/(.*)",
       "dest": "/backend/server.js"
+    },
+    {
+      "src": "/static/(.*)",
+      "dest": "/my-app/build/static/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/my-app/build/index.html"
     }
   ]
 }
