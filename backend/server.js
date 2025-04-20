@@ -58,9 +58,8 @@ app.get("/api", (req, res) => {
 });
 
 // Mount routes WITH /api prefix again
-app.use("/api/auth", require("./routes/authRoutes.js"));
-app.use("/api/transport", require("./routes/transportRoutes.js"));
-app.use("/api/review", require("./routes/reviewRoutes.js"));
-
+app.use("/auth", require("./routes/authRoutes.js"));
+app.use("/transport", require("./routes/transportRoutes.js"));
+app.use("/review", require("./routes/reviewRoutes.js"));
 // Export the app instance for Vercel
 module.exports = app;
