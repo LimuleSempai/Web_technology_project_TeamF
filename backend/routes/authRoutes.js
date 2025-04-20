@@ -30,7 +30,8 @@ router.post("/register", validateUserRegistration, async (req, res) => {
 
     res.status(201).json({ message: "User registered successfully" }); // Respond with success message
   } catch (error) {
-    res.status(500).json({ message: "Server error" }); // Handle errors during registration
+    console.error("Registration error:", error); // Keep server log
+    res.status(500).json({ message: "Server error during registration", error: error.message }); // Send error message to client
   }
 });
 
@@ -60,8 +61,8 @@ router.post("/login", async (req, res) => {
     });
 
   } catch (error) {
-    console.error("Login error:", error);
-    res.status(500).json({ message: "Server error during login" });
+    console.error("Login error:", error); // Keep server log
+    res.status(500).json({ message: "Server error during login", error: error.message }); // Send error message to client
   }
 });
 
@@ -79,7 +80,8 @@ router.get("/profile", (req, res) => {
 router.post("/logout", (req, res) => {
   req.session.destroy((err) => { // Destroy the session
     if (err) {
-      return res.status(500).json({ message: "Could not log out, please try again." });
+      console.error("Logout error:", err); // Keep server log
+      return res.status(500).json({ message: "Could not log out, please try again.", error: err.message }); // Send error message
     }
     res.clearCookie('connect.sid'); // Clear the session cookie (adjust cookie name if different)
     res.status(200).json({ message: "Logout successful" });

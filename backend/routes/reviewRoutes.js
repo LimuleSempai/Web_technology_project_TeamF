@@ -27,7 +27,7 @@ router.get("/route/:routeId/reviews", async (req, res) => {
     res.json(reviews);
   } catch (error) {
     console.error(`[${new Date().toISOString()}] GET /route/${req.params.routeId}/reviews - Error:`, error); // Log error
-    res.status(500).json({ message: "Error fetching reviews" });
+    res.status(500).json({ message: "Error fetching reviews", error: error.message }); // Send error message
   }
 });
 
@@ -55,7 +55,7 @@ router.post("/route/:routeId/review", isAuthenticated, async (req, res) => {
     res.status(201).json(populatedReview); // Respond with the created review (including user name)
   } catch (error) {
     console.error("Error adding review:", error);
-    res.status(500).json({ message: "Error adding review" }); // Catch any error and return server error message
+    res.status(500).json({ message: "Error adding review", error: error.message }); // Send error message
   }
 });
 
@@ -90,7 +90,7 @@ router.put("/review/:id", isAuthenticated, async (req, res) => {
     res.json(populatedReview); // Respond with the updated review
   } catch (error) {
     console.error("Error updating review:", error);
-    res.status(500).json({ message: "Error updating review" }); // Catch errors and return failure response
+    res.status(500).json({ message: "Error updating review", error: error.message }); // Send error message
   }
 });
 
@@ -117,7 +117,7 @@ router.delete("/review/:id", isAuthenticated, async (req, res) => {
     res.json({ message: "Review has been deleted successfully" }); // Return a success message after deletion
   } catch (error) {
     console.error("Error deleting review:", error);
-    res.status(500).json({ message: "Error deleting review" }); // Handle errors during deletion
+    res.status(500).json({ message: "Error deleting review", error: error.message }); // Send error message
   }
 });
 // Export the router so it can be used in server.js

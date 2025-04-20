@@ -216,10 +216,10 @@ async function fetchAndStoreRealtimeData() {
       return []; // Return empty array if no data
     }
   } catch (error) {
-    console.error("Error in fetchAndStoreRealtimeData:", error);
-    // Rethrow the error to be caught by the calling route
+    console.error("Error in fetchAndStoreRealtimeData:", error); // Keep server log
     const errorMessage = error.response ? JSON.stringify(error.response.data) : error.message;
-    throw new Error(`Error fetching transport data: ${errorMessage}`);
+    // Throw error with detailed message to be caught by calling route
+    throw new Error(`Error fetching transport data: ${errorMessage}`); 
   }
 }
 
@@ -236,7 +236,7 @@ router.get("/stops", (req, res) => {
     res.json(stopNames);
   } catch (error) {
     console.error("Error fetching stop names:", error);
-    res.status(500).json({ message: "Error fetching stop names" });
+    res.status(500).json({ message: "Error fetching stop names", error: error.message }); // Send error message
   }
 });
 // --- End New Route ---
@@ -248,7 +248,7 @@ router.get("/update-transport", async (req, res) => {
     res.json({ message: "Transport data update process completed successfully." });
   } catch (error) {
     // Error is already logged in the helper function
-    res.status(500).json({ message: "Error during transport data update.", error: error.message });
+    res.status(500).json({ message: "Error during transport data update.", error: error.message }); // Send error message
   }
 });
 
@@ -313,7 +313,7 @@ router.get("/transports", async (req, res) => {
     res.json(data);
   } catch (error) {
     console.error("Error fetching transport data in /transports route:", error);
-    res.status(500).json({ message: "Error fetching transport data" });
+    res.status(500).json({ message: "Error fetching transport data", error: error.message }); // Send error message
   }
 });
 
@@ -326,7 +326,7 @@ router.get("/transports/route/:route_id", async (req, res) => {
     res.json(data); // Respond with matching data
   } catch (error) {
     console.error(`[${new Date().toISOString()}] GET /transports/route/${req.params.route_id} - Error:`, error); // Log error
-    res.status(500).json({ message: "Error fetching transport data by route_id" }); // Handle database errors
+    res.status(500).json({ message: "Error fetching transport data by route_id", error: error.message }); // Send error message
   }
 });
 
@@ -336,7 +336,7 @@ router.get("/transports/trip/:trip_id", async (req, res) => {
     const data = await TransportData.find({ trip_id: req.params.trip_id }); // Query database for transport entries with given trip_id
     res.json(data); // Respond with matching data
   } catch (error) {
-    res.status(500).json({ message: "Error fetching transport data by trip_id" }); // Handle errors
+    res.status(500).json({ message: "Error fetching transport data by trip_id", error: error.message }); // Send error message
   }
 });
 
@@ -348,7 +348,7 @@ router.get("/transport/:id", async (req, res) => {
 
     res.json(transport); // Return the found transport entry
   } catch (error) {
-    res.status(500).json({ message: "Error fetching transport details" }); // Catch errors and return error response
+    res.status(500).json({ message: "Error fetching transport details", error: error.message }); // Send error message
   }
 });
 // Export the router to be used in the main server file
