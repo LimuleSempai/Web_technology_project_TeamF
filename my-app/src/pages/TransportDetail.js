@@ -87,12 +87,23 @@ function TransportDetail() {
         const fetchReviews = async () => {
             setIsLoadingReviews(true);
             setReviewsError(null);
+            // Reset reviews to empty array at the start of fetch
+            setReviews([]); 
             try {
                 const reviewsRes = await axios.get(`/api/review/route/${routeId}/reviews`);
-                setReviews(reviewsRes.data);
+                // Ensure the response data is an array before setting state
+                if (Array.isArray(reviewsRes.data)) {
+                    setReviews(reviewsRes.data);
+                } else {
+                    console.warn("API did not return an array for reviews:", reviewsRes.data);
+                    setReviewsError('Received invalid data format for reviews.');
+                    // Keep reviews as empty array
+                }
             } catch (err) {
                 console.error("Error fetching reviews:", err);
                 setReviewsError(err.response?.data?.message || 'Failed to load reviews.');
+                // Ensure reviews is an empty array on error
+                setReviews([]); 
             } finally {
                 setIsLoadingReviews(false);
             }
