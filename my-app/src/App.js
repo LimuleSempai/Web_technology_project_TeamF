@@ -9,6 +9,7 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import AboutUs from './pages/AboutUs';
 import Profile from './pages/Profile';
+import TransportDetail from './pages/TransportDetail'; // Import the new component
 //import EditProfileModal from "./components/EditProfileModal";
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/transports" element={<Transport />} />
+        <Route path="/transport/:routeId" element={<TransportDetail />} /> {/* Add dynamic route */}
         <Route path="/about" element={<AboutUs />} />
         <Route path="/profile" element={<Profile />} />
       </Routes>
