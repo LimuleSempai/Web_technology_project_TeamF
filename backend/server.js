@@ -68,14 +68,14 @@ app.use(session({
   }
 }));
 
-// Add a test route at /api root
+// Add a test route back at /api
 app.get("/api", (req, res) => {
   console.log("[/api] Test route hit");
   res.setHeader('Access-Control-Allow-Origin', '*'); // Temporarily allow all for this test route
   res.send("🚀 API root is running...");
 });
 
-// Mount routes WITH /api prefix
+// Mount routes WITH /api prefix again
 app.use("/api/auth", require("./routes/authRoutes.js"));
 app.use("/api/transport", require("./routes/transportRoutes.js"));
 app.use("/api/review", require("./routes/reviewRoutes.js"));
