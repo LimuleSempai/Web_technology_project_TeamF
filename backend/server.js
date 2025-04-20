@@ -24,22 +24,24 @@ console.log(`[CORS Setup] NODE_ENV: ${NODE_ENV}`);
 
 // Set up CORS middleware
 app.use(cors({
-  origin: function (origin, callback) {
-    console.log(`[CORS Check] Request Origin: ${origin}`); // Log the incoming origin
+  // Temporarily allow all origins for debugging
+  origin: true, 
+  // origin: function (origin, callback) {
+  //   console.log(`[CORS Check] Request Origin: ${origin}`); // Log the incoming origin
 
-    // Allow requests with no origin (like mobile apps or curl requests)
-    if (!origin) return callback(null, true);
+  //   // Allow requests with no origin (like mobile apps or curl requests)
+  //   if (!origin) return callback(null, true);
 
-    // Check if the origin is in the allowed list OR if it's undefined (e.g., server-to-server, curl)
-    // In development, allow any origin for simplicity (optional, could restrict to localhost)
-    if (NODE_ENV !== 'production' || allowedOrigins.includes(origin)) {
-      console.log(`[CORS Check] Allowing origin: ${origin || 'undefined'}`);
-      callback(null, true); // Allow access
-    } else {
-      console.warn(`[CORS Check] Blocking origin: ${origin}`); // Log denied origin
-      callback(new Error('Not allowed by CORS')); // Reject access
-    }
-  },
+  //   // Check if the origin is in the allowed list OR if it's undefined (e.g., server-to-server, curl)
+  //   // In development, allow any origin for simplicity (optional, could restrict to localhost)
+  //   if (NODE_ENV !== 'production' || allowedOrigins.includes(origin)) {
+  //     console.log(`[CORS Check] Allowing origin: ${origin || 'undefined'}`);
+  //     callback(null, true); // Allow access
+  //   } else {
+  //     console.warn(`[CORS Check] Blocking origin: ${origin}`); // Log denied origin
+  //     callback(new Error('Not allowed by CORS')); // Reject access
+  //   }
+  // },
   credentials: true // Allow cookies and session credentials
 }));
 
