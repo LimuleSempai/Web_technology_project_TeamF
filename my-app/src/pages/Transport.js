@@ -165,7 +165,6 @@ const Transport = () => {
       : {};
   }
 
-  const totalFetched = transports.length;
   const totalDisplayedStops = Object.keys(stopsToDisplay).length; // Count based on what's actually displayed
 
   return (
