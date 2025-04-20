@@ -19,17 +19,24 @@ const allowedOrigins = [
   'https://web-tech-teamf-frontend-git-main-limulesempais-projects.vercel.app'
 ];
 
+console.log(`[CORS Setup] Allowed Origins: ${allowedOrigins.join(', ')}`);
+console.log(`[CORS Setup] NODE_ENV: ${NODE_ENV}`);
+
 // Set up CORS middleware
 app.use(cors({
   origin: function (origin, callback) {
+    console.log(`[CORS Check] Request Origin: ${origin}`); // Log the incoming origin
+
     // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
 
-    // Allow all origins in development, otherwise check the whitelist
+    // Check if the origin is in the allowed list OR if it's undefined (e.g., server-to-server, curl)
+    // In development, allow any origin for simplicity (optional, could restrict to localhost)
     if (NODE_ENV !== 'production' || allowedOrigins.includes(origin)) {
+      console.log(`[CORS Check] Allowing origin: ${origin || 'undefined'}`);
       callback(null, true); // Allow access
     } else {
-      console.warn(`CORS Error: Origin ${origin} not allowed.`); // Log denied origin
+      console.warn(`[CORS Check] Blocking origin: ${origin}`); // Log denied origin
       callback(new Error('Not allowed by CORS')); // Reject access
     }
   },
