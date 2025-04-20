@@ -66,12 +66,12 @@ app.use(session({
   }
 }));
 
-// Mount authentication-related routes at /api/auth
-app.use("/api/auth", require("./routes/authRoutes.js"));
-// Mount transport-related routes at /api/transport
-app.use("/api/transport", require("./routes/transportRoutes.js"));
-// Mount review-related routes at /api/review
-app.use("/api/review", require("./routes/reviewRoutes.js"));
+// Mount authentication-related routes at /auth
+app.use("/auth", require("./routes/authRoutes.js"));
+// Mount transport-related routes at /transport
+app.use("/transport", require("./routes/transportRoutes.js"));
+// Mount review-related routes at /review
+app.use("/review", require("./routes/reviewRoutes.js"));
 
 // Default root route to test if the API is running
 app.get("/", (req, res) => {
