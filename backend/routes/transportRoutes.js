@@ -12,7 +12,8 @@ const router = express.Router(); // Create a new Express router instance
 
 // --- GTFS Data Configuration ---
 const GTFS_URL = 'https://www.transportforireland.ie/transitData/Data/GTFS_Realtime.zip';
-const gtfsDir = path.join(__dirname, '..', 'api_definitions', 'GTFS_Realtime');
+// Use /tmp for writeable directory in Vercel serverless
+const gtfsDir = path.join('/tmp', 'GTFS_Realtime');
 const gtfsZipPath = path.join(gtfsDir, 'GTFS_Realtime.zip');
 const stopsFilePath = path.join(gtfsDir, 'stops.txt');
 const routesFilePath = path.join(gtfsDir, 'routes.txt');
