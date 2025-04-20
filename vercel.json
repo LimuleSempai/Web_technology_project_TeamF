@@ -20,11 +20,11 @@
     },
     {
       "src": "/static/(.*)",
-      "dest": "/my-app/build/static/$1"
+      "dest": "/build/static/$1"
     },
     {
       "src": "/(.*)",
-      "dest": "/my-app/build/index.html"
+      "dest": "/build/index.html"
     }
   ]
 }
