@@ -3,12 +3,12 @@ import { useNavigate, Link } from 'react-router-dom';
 import axios from "axios";
 
 const Login = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // Initialize the navigate function to redirect users after login
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-
+  const [email, setEmail] = useState(""); // State to store the user's input email
+  const [password, setPassword] = useState(""); // State to store the user's input password
+  const [error, setError] = useState(""); // State to store error message if login fails
+  // Function to handle form submission
   const handleLogin = (e) => {
     e.preventDefault();
     setError("");
@@ -78,4 +78,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Login; // Export the Login page
