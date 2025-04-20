@@ -24,29 +24,10 @@ console.log(`[CORS Setup] Allowed Origins: ${allowedOrigins.join(', ')}`);
 console.log(`[CORS Setup] NODE_ENV: ${NODE_ENV}`);
 
 // Set up CORS middleware
-app.use(cors({
-  // Revert back to function-based origin check with logging
-  origin: function (origin, callback) {
-    console.log(`[CORS Check] Request Origin: ${origin}`); // Log the incoming origin
-
-    // Allow requests with no origin (like mobile apps or curl requests)
-    // Also allow if origin is undefined (server-to-server, etc.)
-    if (!origin) {
-        console.log(`[CORS Check] Allowing request with no origin.`);
-        return callback(null, true);
-    }
-
-    // Check if the origin is in the allowed list
-    if (allowedOrigins.includes(origin)) {
-      console.log(`[CORS Check] Allowing origin: ${origin}`);
-      callback(null, true); // Allow access
-    } else {
-      console.warn(`[CORS Check] Blocking origin: ${origin}`); // Log denied origin
-      callback(new Error('Not allowed by CORS')); // Reject access
-    }
-  },
-  credentials: true // Allow cookies and session credentials
-}));
+// app.use(cors({
+//   origin: 'https://transit-ie-frontend-ln0k14kfa-warnex04s-projects.vercel.app',
+//   credentials: true 
+// }));
 
 // Built-in middleware to parse JSON request bodies
 app.use(express.json());
