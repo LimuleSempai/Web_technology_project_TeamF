@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom'; // Import Link
 import { FaBus, FaTrain, FaTram } from 'react-icons/fa'; // Import icons
 
 // Helper function to get transport type name and icon
@@ -267,20 +267,24 @@ const Transport = () => {
                     const routeDisplayName = arrival.route_short_name || arrival.route_id;
 
                     return (
-                      <li key={`${arrival.trip_id}-${arrival.stop_id}`} className="p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-2 sm:space-y-0">
-                        <div className="flex items-center space-x-3">
-                          {TypeIcon && <TypeIcon className={`w-5 h-5 ${typeColor}`} />}
-                          <div>
-                            {/* Display routeDisplayName (short name or ID) */}
-                            <span className={`font-medium ${typeColor}`}>{routeDisplayName}</span>
-                            {/* Display typeName even if it's 'Other' */}
-                            <span className="text-sm text-gray-600 ml-2">({typeName})</span>
-                            <span className="text-sm text-gray-500 block sm:inline sm:ml-2">{arrival.direction_id === 0 ? 'Outbound' : 'Inbound'}</span>
+                      // Wrap the list item content in a Link
+                      <li key={`${arrival.trip_id}-${arrival.stop_id}`}>
+                        <Link 
+                          to={`/transport/${arrival.route_id}`} 
+                          className="p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-2 sm:space-y-0 hover:bg-gray-50 transition duration-150 ease-in-out block" // Make link block and add hover effect
+                        >
+                          <div className="flex items-center space-x-3">
+                            {TypeIcon && <TypeIcon className={`w-5 h-5 ${typeColor}`} />}
+                            <div>
+                              <span className={`font-medium ${typeColor}`}>{routeDisplayName}</span>
+                              <span className="text-sm text-gray-600 ml-2">({typeName})</span>
+                              <span className="text-sm text-gray-500 block sm:inline sm:ml-2">{arrival.direction_id === 0 ? 'Outbound' : 'Inbound'}</span>
+                            </div>
                           </div>
-                        </div>
-                        <span className={`text-sm font-medium px-3 py-1 rounded-full ${delayColorClass}`}>
-                          {delayText}
-                        </span>
+                          <span className={`text-sm font-medium px-3 py-1 rounded-full ${delayColorClass}`}>
+                            {delayText}
+                          </span>
+                        </Link>
                       </li>
                     );
                   })}
