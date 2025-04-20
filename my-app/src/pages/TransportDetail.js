@@ -70,11 +70,15 @@ function TransportDetail() {
 
     // Fetch transport details and reviews
     useEffect(() => {
-        const fetchTransportDetails = async () => {
+        const fetchDetailsAndReviews = async () => {
             setIsLoadingDetails(true);
+            setIsLoadingReviews(true);
             setDetailsError(null);
+            setReviewsError(null);
+            setReviews([]);
             try {
-                const detailsRes = await axios.get(`/api/transport/transports/route/${routeId}`);
+                // Fetch transport details
+                const detailsRes = await axios.get(`${process.env.REACT_APP_API_URI}transport/transports/route/${routeId}`);
                 setTransportDetails(detailsRes.data.length > 0 ? detailsRes.data[0] : null);
             } catch (err) {
                 console.error("Error fetching transport details:", err);
@@ -82,35 +86,25 @@ function TransportDetail() {
             } finally {
                 setIsLoadingDetails(false);
             }
-        };
-
-        const fetchReviews = async () => {
-            setIsLoadingReviews(true);
-            setReviewsError(null);
-            // Reset reviews to empty array at the start of fetch
-            setReviews([]); 
+            // Fetch reviews
             try {
-                const reviewsRes = await axios.get(`/api/review/route/${routeId}/reviews`);
-                // Ensure the response data is an array before setting state
+                const reviewsRes = await axios.get(`${process.env.REACT_APP_API_URI}review/route/${routeId}/reviews`);
                 if (Array.isArray(reviewsRes.data)) {
                     setReviews(reviewsRes.data);
                 } else {
                     console.warn("API did not return an array for reviews:", reviewsRes.data);
                     setReviewsError('Received invalid data format for reviews.');
-                    // Keep reviews as empty array
                 }
             } catch (err) {
                 console.error("Error fetching reviews:", err);
                 setReviewsError(err.response?.data?.message || 'Failed to load reviews.');
-                // Ensure reviews is an empty array on error
-                setReviews([]); 
+                setReviews([]);
             } finally {
                 setIsLoadingReviews(false);
             }
         };
 
-        fetchTransportDetails();
-        fetchReviews();
+        fetchDetailsAndReviews();
     }, [routeId]);
 
     // Handle review submission
@@ -129,7 +123,7 @@ function TransportDetail() {
         setReviewError('');
 
         try {
-            const response = await axios.post(`/api/review/route/${routeId}/review`,
+            const response = await axios.post(`${process.env.REACT_APP_API_URI}review/route/${routeId}/review`,
                 { rating, comment },
                 { withCredentials: true } // Send cookies if using session-based auth
             );
@@ -174,7 +168,7 @@ function TransportDetail() {
         setUpdateError('');
 
         try {
-            const response = await axios.put(`/api/review/review/${editingReviewId}`,
+            const response = await axios.put(`${process.env.REACT_APP_API_URI}review/review/${editingReviewId}`,
                 { rating: editRating, comment: editComment },
                 { withCredentials: true }
             );
@@ -197,7 +191,7 @@ function TransportDetail() {
         }
 
         try {
-            await axios.delete(`/api/review/review/${reviewId}`, { withCredentials: true });
+            await axios.delete(`${process.env.REACT_APP_API_URI}review/review/${reviewId}`, { withCredentials: true });
             setReviews(reviews.filter(review => review._id !== reviewId)); // Remove review from state
         } catch (err) {
             console.error("Error deleting review:", err);
