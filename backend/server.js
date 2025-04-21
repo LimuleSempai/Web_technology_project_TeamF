@@ -15,10 +15,10 @@ const NODE_ENV = process.env.NODE_ENV || 'development'; // Determine environment
 // Define which frontends are allowed to connect to the API in production
 const allowedOrigins = [
   'http://localhost:3000', // Keep localhost for local testing convenience
+  'https://transit-ie-frontend.vercel.app',
+  'https://transit-ie-frontend-ln0k14kfa-warnex04s-projects.vercel.app',
   'https://web-tech-teamf-frontend.vercel.app',
-  'https://web-tech-teamf-frontend-git-main-limulesempais-projects.vercel.app',
-  'https://transit-ie-frontend-ln0k14kfa-warnex04s-projects.vercel.app', // Add the new preview URL
-  'https://transit-ie-frontend.vercel.app'
+  'https://web-tech-teamf-frontend-git-main-limulesempais-projects.vercel.app'
 ];
 
 console.log(`[CORS Setup] Allowed Origins: ${allowedOrigins.join(', ')}`);
@@ -69,3 +69,10 @@ app.use("/review", require("./routes/reviewRoutes.js"));
 
 // Export the app instance for Vercel
 module.exports = app;
+
+// Start the server if this file is run directly
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
+}
