@@ -67,7 +67,13 @@ const Header = () => {
                             <FaBus className="mr-2 h-6 w-6 text-indigo-400" /> {/* Example Logo */}
                             <span>TransportApp</span>
                         </Link>
-                        {/* Navigation Links can go here if needed */}
+                        {/* link to transport page */}
+                        <Link
+                            to="/transport"
+                            className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                        >
+                            Transport
+                        </Link>
                     </div>
                     <div className="flex items-center space-x-4">
                         {user ? (
