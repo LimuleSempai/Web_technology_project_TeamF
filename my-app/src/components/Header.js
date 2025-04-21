@@ -69,7 +69,7 @@ const Header = () => {
                         </Link>
                         {/* link to transport page */}
                         <Link
-                            to="/transport"
+                            to="/transports"
                             className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                         >
                             Transport
