@@ -18,11 +18,12 @@ const Login = () => {
         if (res.data && res.data.user) {
           localStorage.setItem('user', JSON.stringify(res.data.user));
           console.log('User stored in localStorage:', res.data.user);
+          // Don't reload the page, just navigate
+          navigate('/');
         } else {
           console.warn('Login response did not contain user data.');
+          setError('Login successful but user data was missing');
         }
-        navigate('/');
-        window.location.reload();
       })
       .catch((err) => {
         console.error("Login error:", err);

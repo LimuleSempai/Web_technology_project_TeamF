@@ -69,16 +69,16 @@ app.use(cookieParser());
 // Configure Sessions & Cookies
 app.use(session({
   secret: process.env.SESSION_SECRET || "supersecretkey", // Secret key to sign the session ID
-  resave: true, // Force session to be saved even if unmodified
-  saveUninitialized: true, // Save uninitialized sessions
+  resave: false, // Changed from true to prevent unnecessary session saves
+  saveUninitialized: false, // Changed from true to comply with regulations and prevent empty sessions
   store: MongoStore.create({ // Use MongoDB as session store
     mongoUrl: process.env.MONGO_URI, // MongoDB connection URI
     collectionName: "sessions" // Name of collection to store sessions
   }),
   cookie: {
-    secure: NODE_ENV === 'production', // Only true in production with HTTPS
+    secure: NODE_ENV === 'production', // Only set secure in production with HTTPS
     httpOnly: true, // Prevent client-side JS from accessing the cookie 
-    maxAge: 1000 * 60 * 60 * 2, // 2 hours session expiration,
+    maxAge: 1000 * 60 * 60 * 24, // Extended to 24 hours for better user experience
     sameSite: NODE_ENV === 'production' ? 'none' : 'lax' // Required for cross-origin cookies
   }
 }));

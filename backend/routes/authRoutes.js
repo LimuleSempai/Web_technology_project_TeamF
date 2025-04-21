@@ -78,14 +78,27 @@ router.get("/profile", (req, res) => {
 
 // Logout User
 router.post("/logout", (req, res) => {
-  req.session.destroy((err) => { // Destroy the session
-    if (err) {
-      console.error("Logout error:", err); // Keep server log
-      return res.status(500).json({ message: "Could not log out, please try again.", error: err.message }); // Send error message
-    }
-    res.clearCookie('connect.sid'); // Clear the session cookie (adjust cookie name if different)
-    res.status(200).json({ message: "Logout successful" });
-  });
+  if (req.session) {
+    req.session.destroy((err) => { // Destroy the session
+      if (err) {
+        console.error("Logout error:", err); // Keep server log
+        return res.status(500).json({ message: "Could not log out, please try again.", error: err.message });
+      }
+      
+      // Clear the session cookie - adjust cookie name if different
+      res.clearCookie('connect.sid', {
+        path: '/',
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
+      });
+      
+      res.status(200).json({ message: "Logout successful" });
+    });
+  } else {
+    // No session exists
+    res.status(200).json({ message: "No active session to log out" });
+  }
 });
 
 // Route to update user profile (name, email, password)

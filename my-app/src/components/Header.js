@@ -7,51 +7,59 @@ import './Header.css';
 
 const Header = () => {
     const [user, setUser] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
 
     // Check login status on mount
     useEffect(() => {
-        // Option 1: Check localStorage first for immediate UI update
+        // First set from localStorage for immediate UI update
         const storedUser = localStorage.getItem('user');
         if (storedUser) {
             try {
                 setUser(JSON.parse(storedUser));
             } catch (e) {
                 console.error("Error parsing user from localStorage", e);
-                localStorage.removeItem('user'); // Clear invalid data
+                localStorage.removeItem('user');
             }
         }
 
-        // Option 2 (Recommended): Verify status with backend
-        axios.get(`${process.env.REACT_APP_API_URI}auth/status`, { withCredentials: true })
+        // Then verify with backend
+        setIsLoading(true);
+        axios.get(`${process.env.REACT_APP_API_URI}auth/status`, { 
+            withCredentials: true 
+        })
             .then(res => {
+                setIsLoading(false);
                 if (res.data.isLoggedIn) {
                     setUser(res.data.user);
-                    // Optionally update localStorage if backend data is more current
                     localStorage.setItem('user', JSON.stringify(res.data.user));
                 } else {
                     setUser(null);
-                    localStorage.removeItem('user'); // Ensure localStorage is clear if not logged in
+                    localStorage.removeItem('user');
                 }
             })
             .catch(err => {
+                setIsLoading(false);
                 console.error("Error checking auth status:", err);
-                // Keep user null or based on localStorage, maybe show error
-                // If request fails, maybe trust localStorage temporarily?
+                // Don't clear localStorage on network errors
             });
     }, []);
 
     const handleLogout = () => {
-        axios.post(`${process.env.REACT_APP_API_URI}auth/logout`, {}, { withCredentials: true })
+        axios.post(`${process.env.REACT_APP_API_URI}auth/logout`, {}, { 
+            withCredentials: true 
+        })
             .then(() => {
-                localStorage.removeItem('user'); // Clear user from localStorage
+                localStorage.removeItem('user');
                 setUser(null);
-                navigate('/'); // Redirect to home page
-                window.location.reload(); // Force reload to ensure state reset across components
+                navigate('/');
             })
             .catch(err => {
                 console.error("Logout failed:", err);
-                // Optionally show an error message to the user
+                // Still clear local storage even if server request fails
+                localStorage.removeItem('user');
+                setUser(null);
+                navigate('/');
             });
     };
 
