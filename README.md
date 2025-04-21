@@ -2,9 +2,9 @@
 
 ### Contributions :
 Contributions can be found from the commit :
-Warnex04 : BAKER
-LimuleSempai : CATEZ
-denisShar : SHARIPOV
+- Warnex04 : BAKER
+- LimuleSempai : CATEZ
+- denisShar : SHARIPOV
 
 ## Introduction
 This project is a web application developed by Team F for a course on web technologies. The application provides real-time transport data, user authentication, and review functionalities. The backend is built using Node.js and Express, while the frontend is developed with React.
