@@ -17,7 +17,8 @@ const allowedOrigins = [
   'http://localhost:3000', // Keep localhost for local testing convenience
   'https://web-tech-teamf-frontend.vercel.app',
   'https://web-tech-teamf-frontend-git-main-limulesempais-projects.vercel.app',
-  'https://transit-ie-frontend-ln0k14kfa-warnex04s-projects.vercel.app' // Add the new preview URL
+  'https://transit-ie-frontend-ln0k14kfa-warnex04s-projects.vercel.app', // Add the new preview URL
+  'https://transit-ie-frontend.vercel.app/'
 ];
 
 console.log(`[CORS Setup] Allowed Origins: ${allowedOrigins.join(', ')}`);
@@ -25,7 +26,13 @@ console.log(`[CORS Setup] NODE_ENV: ${NODE_ENV}`);
 
 // Set up CORS middleware
 app.use(cors({
-  origin: '*', // Or specify your frontend URL for more security
+  origin: function(origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true
 }));
 
