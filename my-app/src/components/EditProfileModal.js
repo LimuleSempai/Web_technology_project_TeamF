@@ -14,7 +14,11 @@ const EditProfileModal = ({ onClose, onSuccess }) => {
   const [success, setSuccess] = useState(''); // State to store success message upon update
 
   useEffect(() => { // useEffect fetches the current user profile when the modal mounts
-    axios.get(`${process.env.REACT_APP_API_URI}auth/profile`, { withCredentials: true }) // Send GET request to backend to retrieve logged-in user info
+    const token = localStorage.getItem('token');
+    if (!token) return;
+    axios.get(`${process.env.REACT_APP_API_URI}auth/profile`, {
+      headers: { Authorization: `Bearer ${token}` }
+    })
       .then(res => { // If successful, update form state with name and email 
         setFormData(prev => ({ ...prev, name: res.data.name, email: res.data.email })); // Use previous state and override name/email from response
       })
@@ -122,7 +126,7 @@ const EditProfileModal = ({ onClose, onSuccess }) => {
       if (password) updateData.password = password; // Include password if it's present
       // Send PUT request to backend with updated profile data
       await axios.put(`${process.env.REACT_APP_API_URI}auth/profile`, updateData, {
-        withCredentials: true, // Pass cookies/session credentials with the request
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
 
       setSuccess('Profile updated!'); // Show a success message temporarily

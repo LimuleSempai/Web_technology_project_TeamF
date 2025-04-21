@@ -13,16 +13,16 @@ const Login = () => {
     e.preventDefault();
     setError("");
 
-    axios.post(`${process.env.REACT_APP_API_URI}auth/login`, { email, password }, { withCredentials: true })
+    axios.post(`${process.env.REACT_APP_API_URI}auth/login`, { email, password })
       .then((res) => {
-        if (res.data && res.data.user) {
+        if (res.data && res.data.user && res.data.token) {
           localStorage.setItem('user', JSON.stringify(res.data.user));
-          console.log('User stored in localStorage:', res.data.user);
-          // Don't reload the page, just navigate
+          localStorage.setItem('token', res.data.token);
+          console.log('User and token stored in localStorage:', res.data.user, res.data.token);
           navigate('/');
         } else {
-          console.warn('Login response did not contain user data.');
-          setError('Login successful but user data was missing');
+          console.warn('Login response did not contain user data or token.');
+          setError('Login successful but user data or token was missing');
         }
       })
       .catch((err) => {

@@ -125,7 +125,7 @@ function TransportDetail() {
         try {
             const response = await axios.post(`${process.env.REACT_APP_API_URI}review/route/${routeId}/review`,
                 { rating, comment },
-                { withCredentials: true } // Send cookies if using session-based auth
+                { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
             );
             // Add user name to the new review before adding to state
             const newReview = { ...response.data, userId: { _id: user.id, name: user.name } };
@@ -170,7 +170,7 @@ function TransportDetail() {
         try {
             const response = await axios.put(`${process.env.REACT_APP_API_URI}review/review/${editingReviewId}`,
                 { rating: editRating, comment: editComment },
-                { withCredentials: true }
+                { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
             );
             // Ensure the updated review data includes the user name if needed
             const updatedReview = { ...response.data, userId: { _id: user.id, name: user.name } };
@@ -191,7 +191,7 @@ function TransportDetail() {
         }
 
         try {
-            await axios.delete(`${process.env.REACT_APP_API_URI}review/review/${reviewId}`, { withCredentials: true });
+            await axios.delete(`${process.env.REACT_APP_API_URI}review/review/${reviewId}`, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } });
             setReviews(reviews.filter(review => review._id !== reviewId)); // Remove review from state
         } catch (err) {
             console.error("Error deleting review:", err);

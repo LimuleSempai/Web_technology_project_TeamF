@@ -25,8 +25,15 @@ const Header = () => {
 
         // Then verify with backend
         setIsLoading(true);
-        axios.get(`${process.env.REACT_APP_API_URI}auth/status`, { 
-            withCredentials: true 
+        const token = localStorage.getItem('token');
+        if (!token) {
+            setIsLoading(false);
+            setUser(null);
+            localStorage.removeItem('user');
+            return;
+        }
+        axios.get(`${process.env.REACT_APP_API_URI}auth/status`, {
+            headers: { Authorization: `Bearer ${token}` }
         })
             .then(res => {
                 setIsLoading(false);
@@ -41,26 +48,14 @@ const Header = () => {
             .catch(err => {
                 setIsLoading(false);
                 console.error("Error checking auth status:", err);
-                // Don't clear localStorage on network errors
             });
     }, []);
 
     const handleLogout = () => {
-        axios.post(`${process.env.REACT_APP_API_URI}auth/logout`, {}, { 
-            withCredentials: true 
-        })
-            .then(() => {
-                localStorage.removeItem('user');
-                setUser(null);
-                navigate('/');
-            })
-            .catch(err => {
-                console.error("Logout failed:", err);
-                // Still clear local storage even if server request fails
-                localStorage.removeItem('user');
-                setUser(null);
-                navigate('/');
-            });
+        localStorage.removeItem('user');
+        localStorage.removeItem('token');
+        setUser(null);
+        navigate('/');
     };
 
     return (
