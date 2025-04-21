@@ -18,7 +18,7 @@ const allowedOrigins = [
   'https://web-tech-teamf-frontend.vercel.app',
   'https://web-tech-teamf-frontend-git-main-limulesempais-projects.vercel.app',
   'https://transit-ie-frontend-ln0k14kfa-warnex04s-projects.vercel.app', // Add the new preview URL
-  'https://transit-ie-frontend.vercel.app/'
+  'https://transit-ie-frontend.vercel.app'
 ];
 
 console.log(`[CORS Setup] Allowed Origins: ${allowedOrigins.join(', ')}`);
