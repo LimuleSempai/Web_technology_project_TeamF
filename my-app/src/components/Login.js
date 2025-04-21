@@ -13,7 +13,7 @@ const Login = () => {
     e.preventDefault();
     setError("");
 
-    axios.post(`/api/auth/login`, { email, password }, { withCredentials: true })
+    axios.post(`${process.env.REACT_APP_API_URI}auth/login`, { email, password }, { withCredentials: true })
       .then((res) => {
         if (res.data && res.data.user) {
           localStorage.setItem('user', JSON.stringify(res.data.user));
