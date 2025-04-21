@@ -76,7 +76,7 @@ app.use(session({
     collectionName: "sessions" // Name of collection to store sessions
   }),
   cookie: {
-    secure: false, // NODE_ENV === 'production', // Only set secure in production with HTTPS
+    secure: NODE_ENV === 'production', // Only set secure in production with HTTPS
     httpOnly: true, // Prevent client-side JS from accessing the cookie 
     maxAge: 1000 * 60 * 60 * 24, // Extended to 24 hours for better user experience
     sameSite: NODE_ENV === 'production' ? 'none' : 'lax' // Required for cross-origin cookies
