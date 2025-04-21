@@ -6,6 +6,8 @@ Contributions can be found from the commit :
 - LimuleSempai : CATEZ
 - denisShar : SHARIPOV
 
+[Click to see current contributions to the project](https://github.com/LimuleSempai/Web_technology_project_TeamF/graphs/contributors)
+
 ## Introduction
 This project is a web application developed by Team F for a course on web technologies. The application provides real-time transport data, user authentication, and review functionalities. The backend is built using Node.js and Express, while the frontend is developed with React.
 
