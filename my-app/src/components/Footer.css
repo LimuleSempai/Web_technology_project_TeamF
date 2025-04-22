@@ -8,19 +8,19 @@
     width: 100%;
   }
   
-  a:link {
+  a.Glink:link {
     color: blue;
     background-color: transparent;
     text-decoration: none;
   }
   
-  a:visited {
+  a.GLink:visited {
     color: blueviolet;
     background-color: transparent;
     text-decoration: none;
   }
   
-  a:hover {
+  a.Glink:hover {
     color: burlywood;
     background-color: transparent;
     text-decoration: underline;

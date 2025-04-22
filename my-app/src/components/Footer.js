@@ -15,7 +15,7 @@ const Footer = () => {
     // JSX for the footer element with a class for styling
     <footer className="footer">
       {/* Display the current year and team information */}
-      <p>&copy; {new Date().getFullYear()} Team F - <a href="https://www.griffith.ie/">Griffith College</a></p>
+      <p>&copy; {new Date().getFullYear()} Team F - <a classname="Glink" href="https://www.griffith.ie/" target="_blank">Griffith College</a></p>
 
       {/* Link to the About Us page */}
       <Link to="/about" className="footer-link">About Us</Link>
