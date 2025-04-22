@@ -48,5 +48,5 @@ html, body, #root {
 }
 
 .app-content {
-  flex: 1;
+  padding-bottom: 60px;
 }
