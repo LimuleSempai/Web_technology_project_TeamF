@@ -8,20 +8,20 @@
     width: 100%;
   }
   
-  a.Glink:link {
-    color: blue;
-    background-color: transparent;
+  .Glink {
+    color: #1d4ed8;
     text-decoration: none;
+    font-weight: 500;
   }
-  
-  a.GLink:visited {
-    color: blueviolet;
-    background-color: transparent;
-    text-decoration: none;
+
+  .Glink:hover {
+    color: #facc15;
   }
-  
-  a.Glink:hover {
-    color: burlywood;
-    background-color: transparent;
-    text-decoration: underline;
+
+  .Glink:visited {
+    color: #9333ea; 
+  }
+
+  .Glink:active {
+    color: #2563eb; 
   }
