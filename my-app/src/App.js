@@ -14,7 +14,9 @@ import TransportDetail from './pages/TransportDetail'; // Import the new compone
 function App() {
   return (
     <Router>
+      <div className="app-wrapper">
       <Header />
+      <main className="app-content">
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
@@ -24,7 +26,9 @@ function App() {
         <Route path="/about" element={<AboutUs />} />
         <Route path="/profile" element={<Profile />} />
       </Routes>
+      </main>
       <Footer />
+      </div>
     </Router>
   );
 }

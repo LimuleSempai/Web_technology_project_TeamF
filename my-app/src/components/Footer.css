@@ -25,3 +25,7 @@
   .Glink:active {
     color: #2563eb; 
   }
+
+  .footer-link {
+    text-decoration: underline;
+  }
