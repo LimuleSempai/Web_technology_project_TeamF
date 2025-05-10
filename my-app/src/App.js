@@ -1,3 +1,9 @@
+// Created by LimuleSempai : 25/03/25
+// Modified 8 times by LimuleSempai : last 10/05/25
+// Modified 1 time by Warnex04 : last 20/04/25
+
+// Organize components in the web app
+
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from "./pages/Home";
@@ -9,7 +15,6 @@ import Footer from './components/Footer';
 import AboutUs from './pages/AboutUs';
 import Profile from './pages/Profile';
 import TransportDetail from './pages/TransportDetail'; // Import the new component
-//import EditProfileModal from "./components/EditProfileModal";
 
 function App() {
   return (

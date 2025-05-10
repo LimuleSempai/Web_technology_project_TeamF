@@ -1,3 +1,9 @@
+// Created by LimuleSempai : 16/03/25
+// Modified 2 times by LimuleSempai : last 10/05/25
+// Modified 1 time by Warnex04 : last 20/04/25
+
+// Database model for the review element
+
 const mongoose = require("mongoose"); // Import the Mongoose library for MongoDB object modeling
 // Define a new schema for reviews
 const ReviewSchema = new mongoose.Schema({

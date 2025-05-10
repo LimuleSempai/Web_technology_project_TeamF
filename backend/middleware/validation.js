@@ -1,3 +1,9 @@
+// Created by Warnex04 : 16/03/25
+// Modified 2 times by LimuleSempai : last 10/05/25
+// Modified 1 time by Warnex04 : last 16/03/25
+
+// Server side validation for registration
+
 const { check, validationResult } = require("express-validator"); // Import validation functions and result handler from express-validator
 // Define middleware array to validate user registration inputs
 const validateUserRegistration = [

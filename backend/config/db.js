@@ -1,3 +1,8 @@
+// Created by LimuleSempai : 16/03/25
+// Modified 3 times by LimuleSempai : last 10/05/25
+
+// Makes the connection to the MongoDB database
+
 const mongoose = require("mongoose"); // Import the Mongoose library to connect to MongoDB
 require("dotenv").config(); // Load environment variables from the .env file
 // Define an asynchronous function to connect to the MongoDB database

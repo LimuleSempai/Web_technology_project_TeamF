@@ -1,3 +1,9 @@
+// Created by LimuleSempai : 08/04/25
+// Modified 6 times by LimuleSempai : last 10/05/25
+// Modified 5 times by Warnex04 : 21/04/25
+
+// Login page
+
 // Import React and useState for state management
 import React, { useState } from "react";
 

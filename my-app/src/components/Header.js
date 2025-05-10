@@ -1,3 +1,9 @@
+// Created by LimuleSempai : 08/04/25
+// Modified 6 times by LimuleSempai : last 10/05/25
+// Modified 4 times by Warnex04 : last 21/04/25
+
+// Define the header
+
 // src/components/Header.js
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';

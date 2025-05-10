@@ -1,3 +1,9 @@
+// Created by LimuleSempai : 08/04/25
+// Modified 6 times by LimuleSempai : last 10/05/25
+// Modified 2 times by Warnex04 : last 19/04/25
+
+// Register page with client side validation
+
 import React, { useState } from 'react'; // Import React and the useState hook for local component state
 import axios from 'axios'; // Import axios for HTTP requests to the backend
 import './Register.css'; // Import styles specific to the register form

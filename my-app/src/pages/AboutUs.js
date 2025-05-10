@@ -1,3 +1,8 @@
+// Created by LimuleSempai : 08/04/25
+// Modified 2 times by LimuleSempai : last 10/05/25
+
+// About us page
+
 // src/pages/AboutUs.js
 import React from 'react';
 import './AboutUs.css';

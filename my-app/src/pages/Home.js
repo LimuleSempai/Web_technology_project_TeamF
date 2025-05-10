@@ -1,3 +1,9 @@
+// Created by LimuleSempai : 08/04/25
+// Modified 1 time by LimuleSempai : last 10/05/25
+// Modified 1 time by Warnex04 : last 19/04/25
+
+// Home page, default page for the web app
+
 import React from "react";
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 

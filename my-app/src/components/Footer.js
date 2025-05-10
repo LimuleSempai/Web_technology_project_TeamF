@@ -1,4 +1,7 @@
-// src/components/Footer.js
+// Created by LimuleSempai : 08/04/25
+// Modified 9 times by LimuleSempai : last 10/05/25
+
+// Define the footer
 
 // Import React to define a functional component
 import React from 'react';

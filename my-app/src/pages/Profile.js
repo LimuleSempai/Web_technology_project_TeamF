@@ -1,3 +1,9 @@
+// Created by LimuleSempai : 08/04/25
+// Modified 5 times by LimuleSempai : last 10/05/25
+// Modified 2 times by Warnex04 : last 21/04/25
+
+// Profile page for users
+
 // src/pages/Profile.js
 import React, { useEffect, useState } from 'react'; // Import React and useEffect/useState hooks
 import axios from 'axios'; // Import axios for making HTTP requests

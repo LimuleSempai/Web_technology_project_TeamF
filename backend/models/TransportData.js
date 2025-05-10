@@ -1,3 +1,9 @@
+// Created by LimuleSempai : 16/03/25
+// Modified 2 times by LimuleSempai : last 10/05/25
+// Modified 1 time by Warnex04 : last 19/04/25
+
+// Database model for the TransportData element
+
 const mongoose = require("mongoose"); // Import the Mongoose ODM library
 // Define a new schema for storing transport data
 const TransportDataSchema = new mongoose.Schema({

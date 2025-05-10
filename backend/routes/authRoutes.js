@@ -1,3 +1,9 @@
+// Created by LimuleSempai : 16/03/25
+// Modified 8 times by LimuleSempai : last 10/05/25
+// Modified 6 times by Warnex04 : last 21/04/25
+
+// Route file to define calls to the API for User managment
+
 // Import required modules
 const express = require("express");
 const bcrypt = require("bcryptjs"); // Used to hash and compare passwords

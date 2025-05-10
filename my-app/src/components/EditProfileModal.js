@@ -1,3 +1,9 @@
+// Created by LimuleSempai : 09/04/25
+// Modified 7 times by LimuleSempai : last 10/05/25
+// Modified 3 times by Warnex04 : last 21/04/25
+
+// Makes possible to edit profile without changing page (from profile)
+
 import React, { useState, useEffect } from 'react'; // Import React and useState/useEffect hooks
 import axios from 'axios'; // Import Axios for HTTP requests
 import './EditProfileModal.css'; // Import the component-specific CSS

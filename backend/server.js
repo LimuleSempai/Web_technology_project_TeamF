@@ -1,3 +1,9 @@
+// Created by LimuleSempai : 16/03/25
+// Modified 13 times by LimuleSempai : last 10/05/25
+// Modified 23 times by Warnex04 : last 21/04/25
+
+// Server file that runs the backend
+
 // Import core dependencies
 const express = require("express"); // Express web server
 const connectDB = require("./config/db"); // MongoDB connection

@@ -1,3 +1,9 @@
+// Created by LimuleSempai : 08/04/25
+// Modified 4 times by LimuleSempai : last 10/05/25
+// Modified 4 times by Warnex04 : last 20/04/25
+
+// Handle transport data for the frontend
+
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useLocation, Link } from 'react-router-dom'; // Import Link
